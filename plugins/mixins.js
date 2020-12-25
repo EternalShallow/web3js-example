@@ -9,6 +9,12 @@ export default {
     },
     ...mapState({})
   },
+  watch: {
+    // 获取用户信息
+    '$store.state.accounts': function (val) {
+      this.setAccount(val)
+    }
+  },
   data () {
     return {
       resolve: '',
@@ -77,6 +83,7 @@ export default {
         return that.promise
       }
     },
+    setAccount (val) {},
     closeLoading () {
       this.$store.dispatch('updateLoading', false)
     },
