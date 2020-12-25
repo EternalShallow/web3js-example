@@ -1,3 +1,4 @@
 export default () => ({
-  isLoading: false
+  isLoading: false,
+  accounts: []
 })

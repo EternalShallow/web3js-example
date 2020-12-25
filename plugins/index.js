@@ -12,12 +12,8 @@ import yNumberInput from '../components/yNumberInput'
 import yBtn from '../components/yBtn'
 import MessageBox from '../components/confirmBox/confirm'
 import ToastBox from '../components/toastBox/toast'
-// 复制功能
-import VueClipboard from 'vue-clipboard2'
 import LoadMore from '../components/loadmoreBox/loadMore'
 import yNoData from '../components/yNoData'
-VueClipboard.config.autoSetContainer = true // add this line
-Vue.use(VueClipboard)
 const lang = require('../lang/zn.json')
 Vue.component('y-loadmore', LoadMore)
 Vue.component('y-header', yHeader)

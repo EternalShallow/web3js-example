@@ -52,9 +52,7 @@ export default {
   },
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
   plugins: [
-    '~/plugins/index.js',
-    // 解决引入插件插件配置挂载在windows
-    { src: '~/node_modules/vue-clipboard2', ssr: false }
+    '~/plugins/index.js'
     // todo vuetify按需加载
     // {
     //   src: '~/plugins/vuetify.js',

@@ -15,11 +15,6 @@
         <y-btn class="mt24" :color="'disabled'">disabled</y-btn>
         <y-btn class="mt24" :color="'choice'">choice</y-btn>
         <y-btn class="mt24" :color="'select'">select</y-btn>
-        <y-btn class="mt24" :color="'select'"
-          v-clipboard:copy="`https://yottascan.io`"
-          v-clipboard:success="onCopy"
-          v-clipboard:error="onCopyError"
-        >copy text</y-btn>
         <div class="emColor fw5 fs32 pt40 pb40">toast start...</div>
         <y-btn class="mt24" :color="'select'" @submitAction="submitAction">toast</y-btn>
         <y-btn class="mt24" :color="'select'" @submitAction="submitActionBox">toastBox</y-btn>
@@ -56,18 +51,6 @@ export default {
     }
   },
   methods: {
-    onCopyError () {
-      this.$toastBox.showToastBox({
-        text: 'copy error',
-        type: 'none'
-      })
-    },
-    onCopy () {
-      this.$toastBox.showToastBox({
-        text: this.$lang.copy_success,
-        type: 'none'
-      })
-    },
     submitAction () {
       this.$toastBox.showToastBox({
         text: this.$lang.market_success_text,

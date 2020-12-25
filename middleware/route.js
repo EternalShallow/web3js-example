@@ -8,6 +8,6 @@ export default function ({ isHMR, app, store, route, params, error, redirect }) 
   }
 */
   if (route.fullPath === '/') {
-    return redirect('/demo')
+    return redirect('/transaction')
   }
 }

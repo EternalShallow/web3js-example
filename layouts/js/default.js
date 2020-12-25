@@ -12,10 +12,31 @@ export default {
   computed: {
     ...mapState({
       isLoading: state => state.isLoading
-    })
+    }),
+    'store.state.accounts': function () {
+      return this.$store.state.accounts
+    }
   },
-  mounted () {
+  watch: {
+    // 获取用户信息
+    '$store.state.accounts': function (val) {
+      this.setAccount(val)
+    }
+  },
+  async mounted () {
     console.info(version_info, 'color:#FC4343;')
+    if (this.$accounts === undefined || (this.$accounts && this.$accounts.length < 1)) {
+      this.initWeb3().then(res => {
+        console.log(res)
+      }).catch(err => {
+        console.log(err)
+      })
+    }
   },
-  methods: {}
+  methods: {
+    setAccount (val) {
+      console.log('setAccount')
+      console.log(val)
+    }
+  }
 }
