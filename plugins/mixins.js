@@ -72,14 +72,14 @@ export default {
           }
           that.resolve({
             code: 200,
-            msg: 'success',
+            message: 'success',
             data: accounts
           })
           return that.promise
         }
       } catch (err) {
         console.log(err)
-        that.reject(err)
+        that.resolve(err)
         return that.promise
       }
     },

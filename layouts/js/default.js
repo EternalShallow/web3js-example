@@ -26,10 +26,11 @@ export default {
   async mounted () {
     console.info(version_info, 'color:#FC4343;')
     if (this.$accounts === undefined || (this.$accounts && this.$accounts.length < 1)) {
-      this.initWeb3().then(res => {
-        console.log(res)
-      }).catch(err => {
-        console.log(err)
+      const init_wab3 = await this.initWeb3()
+      console.log(init_wab3)
+      this.$toastBox.showToastBox({
+        type: 'none',
+        text: init_wab3.message
       })
     }
   },

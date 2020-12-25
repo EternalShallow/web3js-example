@@ -49,8 +49,14 @@ export default {
     },
     async connectWallet () {
       const init_wab3 = await this.initWeb3()
-      await that.getBalanceInfo()
       console.log(init_wab3)
+      that.$toastBox.showToastBox({
+        type: 'none',
+        text: init_wab3.message
+      })
+      if (init_wab3.code === 200) {
+        await that.getBalanceInfo()
+      }
     },
     async getBalanceInfo () {
       try {
