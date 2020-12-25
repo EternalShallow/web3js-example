@@ -1,0 +1,44 @@
+{
+  "name": "web3-example",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "cross-env BASE=dev nuxt",
+    "build:dev": "cross-env BASE=dev nuxt build",
+    "build:prod": "cross-env BASE=prod nuxt build",
+    "start": "nuxt start",
+    "generate": "nuxt generate",
+    "lint:js": "eslint --ext .js,.vue --ignore-path .gitignore .",
+    "lint": "npm run lint:js"
+  },
+  "dependencies": {
+    "axios": "^0.21.0",
+    "core-js": "^3.6.5",
+    "nuxt": "^2.14.6",
+    "postcss-px2rem": "^0.3.0",
+    "qs": "^6.9.4",
+    "vue": "^2.6.12",
+    "vuex": "^3.6.0",
+    "web3": "^1.3.1"
+  },
+  "devDependencies": {
+    "@nuxtjs/axios": "^5.12.2",
+    "@nuxtjs/dotenv": "^1.4.1",
+    "@nuxtjs/eslint-config": "^3.1.0",
+    "@nuxtjs/eslint-module": "^2.0.0",
+    "@nuxtjs/style-resources": "^1.0.0",
+    "@nuxtjs/vuetify": "^1.11.2",
+    "babel-eslint": "^10.1.0",
+    "cross-env": "^7.0.2",
+    "eslint": "^7.10.0",
+    "eslint-plugin-nuxt": "^1.0.0",
+    "git-revision-webpack-plugin": "^3.0.6",
+    "node-fetch": "^2.6.1"
+  },
+  "config": {
+    "nuxt": {
+      "host": "0.0.0.0",
+      "port": 8888
+    }
+  }
+}

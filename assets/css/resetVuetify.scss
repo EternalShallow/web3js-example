@@ -1,0 +1,206 @@
+@import './fun';
+@import "font";
+.theme--dark.v-application{
+  background-color: $bgColor !important;
+}
+.v-tab{
+  font-size: 32px;
+}
+.container{
+  padding: 0;
+}
+.nuxt__build_indicator {
+  display: none !important;
+}
+.v-input--selection-controls .v-input--selection-controls__input:hover .v-input--selection-controls__ripple:before{
+  transform: none;
+}
+.v-input--selection-controls__ripple {
+  display: none;
+  margin: 0 !important;
+}
+.v-application--is-ltr .v-input--selection-controls__input {
+  margin-right: 0 !important;
+}
+.v-input--selection-controls__ripple:before{
+  content: none;
+  display: none;
+}
+.v-input--switch__track, .v-input--selection-controls__input, .v-input__control{
+  width: 64px !important;
+  height: 36px !important;
+  border-radius: 18px !important;
+  opacity: 1 !important;
+}
+.v-input--switch__track{
+  top: unset !important;
+  left: unset !important;
+  right: unset !important;
+}
+.v-input__slot{
+  margin-bottom: 0 !important;
+}
+.v-input--switch:not(.v-input--switch--flat):not(.v-input--switch--inset) .v-input--switch__thumb {
+  width: 30px !important;
+  height: 30px !important;
+  background-color: $bgColor !important;
+  color: $colorFFF !important;
+  box-shadow: none !important;
+  top: 2px !important;
+  left: 4px !important;
+  position: absolute;
+}
+.v-input--switch:not(.v-input--switch--flat):not(.v-input--switch--inset) .v-input--switch__thumb.primary--text {
+  right: 23px !important;
+  left: unset !important;
+}
+.v-input--switch__thumb{
+  top: 0 !important;
+}
+
+.theme--light.v-application{
+  color: $color333;
+}
+
+.v-application .title{
+  font-size: 32px !important;
+  font-weight: 600;
+  line-height: normal;
+  letter-spacing: unset;
+  font-family: "Roboto", sans-serif;
+  text-align: center;
+  color: $emColor;
+}
+.theme--light.v-input--switch .v-input--switch__track {
+  color: $color999 !important;
+}
+.v-input--switch__track.theme--light.primary--text{
+  color: $emColor !important;
+  caret-color: $emColor !important;
+}
+// dialog
+.v-dialog__content--active{
+  background-color: $bgDialog;
+}
+.v-dialog {
+  border-radius: 0 !important;
+  margin: 0 !important;
+  box-shadow: none !important;
+  .dialog-content{
+    width: 670px;
+    background-color: $bgColor;
+    padding: 64px 48px 50px;
+    border-radius: 16px;
+    max-width: 670px !important;
+    font-size: 24px;
+    margin: 0 auto;
+    .dialog-con{
+      margin-top: 40px;
+      .amount-item{
+        width: 140px;
+        height: 70px;
+        line-height: 70px;
+        text-align: center;
+        border-radius: 4px;
+        border: 2px solid $disableBtnBg;
+        margin-left: 20px;
+        font-size: 30px;
+        font-family: SourceHanSansCN-Normal, SourceHanSansCN;
+        font-weight: 400;
+        color: $color666;
+        &.active{
+          border-color: $colorAmount;
+          color: $colorAmount;
+        }
+        &:first-child{
+          margin-left: 0;
+        }
+      }
+    }
+    .btn-operate{
+      margin-top: 50px;
+      font-size: 29px;
+      font-family: SourceHanSansCN-Normal, SourceHanSansCN;
+      font-weight: 400;
+      color: $emColor;
+      line-height: 45px;
+      .cancel-btn{
+        width: 170px;
+        //height: 80px;
+        //border-radius: 8px;
+        //border: 2px solid $emColor;
+        //line-height: 80px;
+        //text-align: center;
+      }
+      .sure-btn{
+        width: 170px;
+        //height: 80px;
+        //background-color: $emColor;
+        //color: $colorFFF;
+        //border-radius: 8px;
+        //line-height: 80px;
+        //text-align: center;
+        margin-left: 70px;
+      }
+    }
+    &.market-profit-tip{
+      width: 510px;
+      padding: 48px 30px;
+      font-size: 28px;
+      position: relative;
+      text-align: justify;
+      .close{
+        position: absolute;
+        right: 24px;
+        top: 46px;
+        width: 36px;
+        height: 36px;
+      }
+    }
+  }
+  .token-path-box{
+    .know-btn{
+      width: 240px;
+      margin: 80px auto 0;
+    }
+    .icon-token{
+      width: 60px;
+      height: 60px;
+      margin-right: 12px;
+    }
+    .token_symbol{
+      font-size: 32px;
+      font-family: SourceHanSansCN-Bold, SourceHanSansCN;
+      font-weight: bold;
+      color: #333333;
+      line-height: 48px;
+    }
+    .icon-arrow-right{
+      width: 20px;
+      height: 15px;
+      margin: 0 12px;
+    }
+    .token-list{
+      margin-bottom: 35px;
+      &:last-child{
+        margin-bottom: 0;
+      }
+    }
+  }
+  &.v-dialog--fullscreen{
+    .second-confirm{
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      background-color: $bgColor;
+      padding: 50px 0;
+      font-size: 32px;
+      .icon-close{
+        width: 50px;
+        height: 50px;
+        padding: 10px;
+      }
+    }
+  }
+}

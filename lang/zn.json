@@ -1,0 +1,193 @@
+{
+  "project_name": "Yswap",
+  "sure_btn": "确定",
+  "cancel_btn": "取消",
+  "cancel_btn_think": "再想想",
+  "withdraw_btn": "提取",
+  "submit_btn": "提交",
+  "confirm_title_default": "温馨提示",
+  "toast_btn_text_default": "知道了",
+  "know_btn_text_default": "我知道了",
+  "no_data_text": "暂无记录",
+  "copy_success": "复制成功",
+  "apply_add_assets_text": "申请添加资产",
+  "apply_add_assets_con": [
+    "1、申请添加资产需提交资产相关信息",
+    "2、资料将提交至社区委员会，通过社区投票来进行审核，请保证资产信息的真实完整",
+    "3、投票完成后，将根据投票结果，进行决策。如若通过即可进行正常的交易做市挖矿"
+  ],
+  "apply_add_assets_weixin": "详情请微信扫码添加“YF小助理",
+  "scatter_login_content": "您正在使用Yswap，需要申请访问你的钱包地址。你确认吗？",
+  "set_popup_slide_point": {
+    "title": "滑点保护",
+    "placeholder": "自定义%",
+    "select_list": [
+      {
+        "name": "1%",
+        "value": 1,
+        "type": "default"
+      },
+      {
+        "name": "3%",
+        "value": 3,
+        "type": "default"
+      },
+      {
+        "name": "5%",
+        "value": 5,
+        "type": "default"
+      }
+    ]
+  },
+  "set_popup_price_title": "成交价保护",
+  "set_title": "交易设置",
+  "set_list": [
+    {
+      "title": "多路径兑换",
+      "desc": "系统将为您匹配价格最优的兑换路径，确保在扣除手续费后，依然能获得更多资产，多路径兑换将支付多笔手续费",
+      "type": "switch"
+    },
+    {
+      "title": "滑点保护",
+      "desc": "兑换请求提交前，兑换价格滑点超过滑点保护的范围，交易将需要您二次确认",
+      "type": "slide"
+    },
+    {
+      "title": "成交价保护",
+      "desc": "兑换请求提交后，实际价格再次上浮的比例超过成交价保护的范围，交易将自动撤销",
+      "type": "price"
+    }
+  ],
+  "set_no_know_rule": "不懂规则?点我进行默认配置",
+  "set_popup_text": "将恢复为默认设置值，是否确认？",
+  "set_popup_success_text": "恢复默认成功",
+  "set_no_number": "请输入1-100有效值",
+  "load_more": {
+    "BOTTOMSTATUS": {
+      "wait": "wait",
+      "loading": "loading",
+      "nodata": "nodata",
+      "error": "error"
+    },
+    "bottom_ext": {
+      "loading": "正在加载更多...",
+      "nodata": "暂无更多数据",
+      "error": "请求数据出错，请点击重试"
+    },
+    "TOPSTATUS": {
+      "wait": "wait",
+      "pulling": "pulling",
+      "limit": "limit",
+      "loading": "loading",
+      "complete": "complete"
+    },
+    "top_text": {
+      "pulling": "下拉刷新",
+      "limit": "释放刷新",
+      "loading": "正在刷新...",
+      "complete": ""
+    }
+  },
+  "withdraw": {
+    "lp_text1": "凭证(LP)",
+    "lp_text2": "可用凭证(LP):",
+    "placeholder": "请输入取回的凭证数量",
+    "recovery_text": "取回资产",
+    "rate_list": [
+      {
+        "name": "25%",
+        "value": 0.25
+      },
+      {
+        "name": "50%",
+        "value": 0.5
+      },
+      {
+        "name": "75%",
+        "value": 0.75
+      },
+      {
+        "name": "全部",
+        "value": 1
+      }
+    ],
+    "btn_text": "确认收回",
+    "withdraw_success": "收回流动性成功"
+  },
+  "market_record": {
+    "title": "做市记录",
+    "status_deposit_amount": "存入数量",
+    "status_withdraw_amount": "提取数量",
+    "status_deposit": "存入",
+    "status_withdraw": "提取",
+    "lp_text": "凭证(LP)数量",
+    "tx_id": "TxID"
+  },
+  "exchange_record": {
+    "title": "兑换记录",
+    "pay_amount": "支付数量",
+    "get_amount": "获得数量",
+    "tx_id": "TxID"
+  },
+  "exchange_price": "兑换价格",
+  "balance_no_enough": "余额不足",
+  "slide_point_text": "滑点",
+  "slide_point_text1": "实际兑换价格已上浮：",
+  "slide_point_text2": "滑点说明：受流动性规模影响，实际兑换价格会有一定程度的上浮，您兑换获得的资产数量会相应的减少，价格上浮的比例称之为滑点。",
+  "slide_point_text3": "滑点越大，您可兑换获得的资产越少。",
+  "fee_text": "手续费",
+  "amount_text_24": "24H兑换量",
+  "flow_cell_amount_text": "流动池总量",
+  "exchange_path_text": "本次兑换路径",
+  "exchange_path_title": "兑换路径",
+  "no_flow_cell_text1": "当前交易暂无流动池",
+  "no_flow_cell_text2": "免费创建市场，成为第一个流动性提供者",
+  "no_flow_cell_text3": "您可以任意金额比例存入并获得凭证",
+  "market_make_now": "立即做市",
+  "your_lp_proof": "您的凭证(LP)",
+  "your_market": "您的做市",
+  "market_proportion": "做市占比",
+  "market_now": "当前做市",
+  "market_principal": "做市本金",
+  "market_principal_tip": "做市本金出现负数时，代表您的做市已盈利，同时您已将本金和部分盈利取出。",
+  "market_profit": "当前收益",
+  "market_profit_tip": "当前盈亏为负数时，表示您的做市出现无常损失。",
+  "no_market_pair_text1": "您在当前流动池中还未存入资金",
+  "no_market_pair_text2": "立即存入资金，赚取交易手续费",
+  "market_create_fail": "创建市场失败，请重试",
+  "market_success_text": "做市成功",
+  "exchange_success_text": "兑换成功",
+  "exchange_flow_cell_no_enough": "当前交易对可供兑换量不足",
+  "slide_overflow_text1": "当前滑点",
+  "slide_overflow_text2": "已超过您设置的",
+  "slide_overflow_text3": "的保护值，请确认后再操作",
+  "include_text": "含",
+  "home": {
+    "tab_list": [
+      {
+        "name": "兑换",
+        "type": "exchange"
+      },
+      {
+        "name": "做市",
+        "type": "market"
+      }
+    ],
+    "pay_token_text": "支付币种",
+    "pay_token_placeholder": "请输入支付数量",
+    "get_token_text": "获得币种",
+    "get_token_placeholder": "请输入获得数量",
+    "balance_text": "余额：",
+    "deposit_text": "存入币种",
+    "deposit_placeholder": "请输入存入数量",
+    "become_market_maker": "*成为做市商可赚取交易手续费",
+    "market_profit_text": "做市收益",
+    "market_profit_con": "成为做市商提供流动性，不需要额外支付任何费用，并且按做市占比赚取交易用户所支付的0.2%手续费。0.2%交易手续费全部留在流动池内，实时分配给到每个做市商。",
+    "btn_exchange_text": "兑换",
+    "btn_sure_exchange_text": "确认兑换",
+    "btn_market_text": "加入市场",
+    "btn_sure_market_text": "确认存入",
+    "btn_create_market_text": "创建市场",
+    "btn_sure_create_market_text": "确认创建"
+  }
+}

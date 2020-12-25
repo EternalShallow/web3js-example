@@ -1,0 +1,132 @@
+@import "font";
+@import "common";
+@import "resetVuetify";
+@import "space";
+@import "fun";
+@import "color";
+.op-enter,.op-leave-to{
+  opacity: 0;
+}
+.op-enter-to,.op-leave{
+  opacity: 1;
+}
+.op-enter-active,.op-leave-active{
+  transition: all .3s;
+}
+
+.no-scroller::-webkit-scrollbar{
+  display: none;
+  overflow-y: auto;
+}
+
+@mixin box-shadow{
+  background: $bgColor;
+  box-shadow: 0px 4px 16px 0px rgba(0, 0, 0, 0.1);
+  border-radius: 16px;
+  padding: 40px 24px;
+}
+
+/*box 自适应伸缩样式*/
+.display-flex {
+  //display: -webkit-flex; /* 新版本语法: Chrome 21+ */
+  display: flex; /* 新版本语法: Opera 12.1, Firefox 22+ */
+  ///*! autoprefixer: off */
+  display: -webkit-flex; /* 老版本语法: Safari, iOS, Android browser, older WebKit browsers. */
+  ///* autoprefixer: on */
+  display: -moz-flex; /* 老版本语法: Firefox (buggy) */
+  display: -ms-flexbox; /* 混合版本语法: IE 10 */
+}
+
+.box-flex1 {
+  -webkit-flex: 1; /* Chrome */
+  -ms-flex: 1; /* IE 10 */
+  flex: 1; /* NEW, Spec - Opera 12.1, Firefox 20+ */
+  -webkit-box-flex: 1; /* OLD - iOS 6-, Safari 3.1-6 */
+  -moz-box-flex: 1; /* OLD - Firefox 19- */
+}
+
+.box-center {
+  justify-content: center; /* 水平居中 */
+  align-items: center; /* 垂直居中 */
+}
+
+/*水平 垂直居中*/
+.box-center-X {
+  justify-content: center; /* 水平居中 */
+}
+
+/*垂直居中*/
+.box-center-Y {
+  align-items: center; /* 垂直居中 */
+}
+
+.box-center-end {
+  align-items: flex-end;
+}
+
+.box-around {
+  justify-content: space-around;
+}
+
+.box-end {
+  justify-content: flex-end;
+}
+
+.box-nowrap{
+  flex-wrap: wrap;
+}
+
+.box-column {
+  flex-direction: column;
+}
+
+.Page{
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  min-width: 640px;
+  max-width: 1360px;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%,-50%);
+  -moz-transform: translate(-50%,-50%);
+  -ms-transform: translate(-50%,-50%);
+  -o-transform: translate(-50%,-50%);
+  transform: translate(-50%,-50%);
+  overflow-x: hidden;
+  font-size: 24px;
+  color: $color333;
+  line-height: 1.1;
+  .content{
+    overflow-y: scroll;
+    padding: 0 40px 40px;
+  }
+}
+
+.ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ellipsis2 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  word-break: break-all;
+}
+
+.ellipsis3 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+  word-break: break-all;
+}
+
+.line16{
+  width: 100%;
+  height: 16px;
+  background-color: $bdColorf2;
+}
