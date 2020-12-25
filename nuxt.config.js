@@ -40,7 +40,7 @@ export default {
   ],
 
   styleResources: {
-    less: [
+    scss: [
       './assets/css/fun.scss',
       './assets/css/resetVuetify.scss',
       './assets/css/color.scss',

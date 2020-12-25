@@ -21,18 +21,18 @@ For detailed explanation on how things work, check out [Nuxt.js docs](https://nu
 
 >assets 下边的文件不能够相互引入但是在 nuxt.config.js 文件里边有先后顺序，下边的可以执行上边的文件
 
-###css配置公共资源（本项目使用less）
+###css配置公共资源（本项目使用scss）
 > `nuxt.config.js` 下 `styleResources` 可配置 `asset` 全局样式。 如：
 ```
 styleResources: {
-    less: [
-      './assets/css/fun.less', // 配置主题色
-      './assets/css/resetVuetify.less', // 重置框架Vuetify颜色
-      './assets/css/color.less', // 声明的颜色class
-      './assets/css/font.less', // 声明的字体大小 class
-      './assets/css/space.less', // 声明的间距class 如 margin padding line-height等
-      './assets/css/common.less', // 初始通用css如 html,body,input等修改浏览器默认样式
-      './assets/css/main.less' // 项目中用到的通用的css文件
+    scss: [
+      './assets/css/fun.scss', // 配置主题色
+      './assets/css/resetVuetify.scss', // 重置框架Vuetify颜色
+      './assets/css/color.scss', // 声明的颜色class
+      './assets/css/font.scss', // 声明的字体大小 class
+      './assets/css/space.scss', // 声明的间距class 如 margin padding line-height等
+      './assets/css/common.scss', // 初始通用css如 html,body,input等修改浏览器默认样式
+      './assets/css/main.scss' // 项目中用到的通用的css文件
     ]
   }
 
