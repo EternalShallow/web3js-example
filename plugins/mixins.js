@@ -36,20 +36,35 @@ export default {
           that.initWeb3()
         }, 500)
       }
-      const web3 = await getWeb3()
+      const { web3, web3_http } = await getWeb3()
       try {
+        Vue.prototype.$web3_http = web3_http
         Vue.prototype.$web3 = web3
-        Vue.prototype.$COIN = new web3.eth.Contract(
-          COIN_ABI.coin_abi_USDT,
-          process.env.coin_address_USDT
+        // usdt 机枪池合约初始化 需要连接主网
+        // Vue.prototype.$COIN = new web3.eth.Contract(
+        //   COIN_ABI.coin_abi_USDT,
+        //   process.env.coin_address_USDT
+        // )
+        // Vue.prototype.$VAULT = new web3.eth.Contract(
+        //   COIN_ABI.coin_vault_machine_USDT,
+        //   process.env.machine_gun_vault_USDT
+        // )
+        // Vue.prototype.$STRATEGY = new web3.eth.Contract(
+        //   COIN_ABI.abi_machine_strategy,
+        //   process.env.machine_gun_strategy_USDT
+        // )
+        // YF 挖矿合约初始化
+        Vue.prototype.$YF = new web3_http.eth.Contract(
+          COIN_ABI.coin_abi_YF,
+          process.env.coin_address_YF
         )
-        Vue.prototype.$VAULT = new web3.eth.Contract(
-          COIN_ABI.coin_vault_machine_USDT,
-          process.env.machine_gun_vault_USDT
+        Vue.prototype.$UNIV2 = new web3_http.eth.Contract(
+          COIN_ABI.coin_abi_UNIV2,
+          process.env.coin_UNIV2_YF_USDT
         )
-        Vue.prototype.$STRATEGY = new web3.eth.Contract(
-          COIN_ABI.abi_machine_strategy,
-          process.env.machine_gun_strategy_USDT
+        Vue.prototype.$REAWORDPOOL = new web3_http.eth.Contract(
+          COIN_ABI.abi_reaword_pool,
+          process.env.pool_coin_UNIV2_YF_USDT
         )
         let accounts
         if (typeof window.ethereum !== 'undefined' && window.ethereum.isMetaMask) {

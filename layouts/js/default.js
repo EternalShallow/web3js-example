@@ -27,7 +27,6 @@ export default {
     console.info(version_info, 'color:#FC4343;')
     if (this.$accounts === undefined || (this.$accounts && this.$accounts.length < 1)) {
       const init_wab3 = await this.initWeb3()
-      console.log(init_wab3)
       this.$toastBox.showToastBox({
         type: 'none',
         text: init_wab3.message
@@ -36,8 +35,6 @@ export default {
   },
   methods: {
     setAccount (val) {
-      console.log('setAccount')
-      console.log(val)
     }
   }
 }
