@@ -4,5 +4,8 @@ export default {
   },
   getAccounts (state) {
     return state.accounts
+  },
+  getTransactions (state) {
+    return state.transactions
   }
 }

@@ -1,4 +1,7 @@
 export default () => ({
   isLoading: false,
-  accounts: []
+  accounts: [],
+  transactions: [],
+  pending_transactions: [],
+  confirm_transactions: []
 })

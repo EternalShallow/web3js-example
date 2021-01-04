@@ -53,7 +53,7 @@ export default {
         //   COIN_ABI.abi_machine_strategy,
         //   process.env.machine_gun_strategy_USDT
         // )
-        // YF 挖矿合约初始化
+        // YF-USDT 挖矿合约初始化
         Vue.prototype.$YF = new web3_http.eth.Contract(
           COIN_ABI.coin_abi_YF,
           process.env.coin_address_YF
@@ -74,6 +74,7 @@ export default {
         } else {
           accounts = await web3.eth.getAccounts()
         }
+        console.log(accounts)
         Vue.prototype.$account = accounts[0]
         Vue.prototype.$accounts = accounts
         await that.$store.dispatch('updateAccounts', accounts)
