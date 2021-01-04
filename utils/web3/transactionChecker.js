@@ -1,9 +1,10 @@
 export default class WatchTransactions {
   constructor (config) {
-    // this.account = config.account
-    this.account = '0xb55AdD32e4608Eb7965eC234E6C0b3f009c3d9D6'
+    this.account = config.account
     this.contract = config.contract
     this.event = config.event || 'allEvents'
+    this.store = config.store
+    this.web3_http = config.web3_http
     this.time = config.time || 2000
     this.internal_transactions = null
   }
@@ -26,11 +27,18 @@ export default class WatchTransactions {
       toBlock: 'latest',
       topics: []
     })
+
     allEvents
       .on('data', (event) => {
         // console.log(event)
       })
       .on('changed', (data) => {
+        console.log('changed', data)
+        that.store.dispatch('updateTransactions', {
+          hash: data.hash,
+          web3_http: that.web3_http,
+          type: 'confirmed'
+        })
         console.log(data)
       })
       .on('connected', (subscriptionId) => {

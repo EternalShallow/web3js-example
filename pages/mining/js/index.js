@@ -57,20 +57,22 @@ export default {
     async initPage () {
       that = this
       if (that.$account) {
-        console.log(await that.$web3_http.eth.getTransaction('0x1fc5522b66b3ea67ee986b3efe280b5bade262f4b3497a47fbeb75774f4fc353'))
+        console.log(await that.$web3_http.eth.getBlock('latest'))
+        console.log(await that.$web3_http.eth.getTransactionReceipt('0x1fc5522b66b3ea67ee986b3efe280b5bade262f4b3497a47fbeb75774f4fc353'))
         // eslint-disable-next-line no-new
         const watch_transactions = new WatchTransactions({
           account: that.$account,
           contract: that.$REAWORDPOOL,
-          event: 'Staked'
+          store: that.$store,
+          web3_http: that.$web3_http
         })
         watch_transactions.setInterval()
-        const watch_transactions_UNIV2 = new WatchTransactions({
-          account: that.$account,
-          contract: that.$UNIV2,
-          event: 'Approval'
-        })
-        watch_transactions_UNIV2.setInterval()
+        // const watch_transactions_UNIV2 = new WatchTransactions({
+        //   account: that.$account,
+        //   contract: that.$UNIV2,
+        //   event: 'Approval'
+        // })
+        // watch_transactions_UNIV2.setInterval()
         that.getBalanceInfo()
         // that.checkTransactionsEvent()
       }
@@ -183,23 +185,20 @@ export default {
       }).on('transactionHash', async function (hash) {
         console.log('transactionHash')
         console.log(hash)
-        console.log(await that.$web3_http.eth.getTransaction(hash))
-        const getTransaction = await that.$web3_http.eth.getTransaction(hash)
-        that.transactions.push(getTransaction)
-        const pendingTransactions = await that.$web3_http.eth.getPendingTransactions()
-        console.log(pendingTransactions)
-        that.$store.dispatch('addTransactions', {
+        that.$store.dispatch('updateTransactions', {
           hash,
           web3_http: that.$web3_http,
+          type: 'added',
           summary: `Approve ${that.balance_UNIV2.balance_univ2_stake}`
         })
-      }).on('confirmation', function (confirmationNumber, receipt) {
-        console.log('confirmation')
-        console.log(confirmationNumber)
-        console.log(receipt)
       }).on('receipt', function (receipt) {
-        console.log(' receipt')
+        console.log('receipt')
         console.log(receipt)
+        that.$store.dispatch('updateTransactions', {
+          hash: receipt.transactionHash,
+          web3_http: that.$web3_http,
+          type: 'confirmed'
+        })
       }).catch(error => {
         console.log(JSON.stringify(error))
         that.isApprove = false

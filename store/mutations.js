@@ -14,15 +14,26 @@ export default {
     const transaction_len = local_transaction.length
     for (let i = 0; i < transaction_len; i++) {
       if (local_transaction[i].hash === payload.hash) {
-        local_transaction.splice(1, i, {
+        const new_transaction = {
           ...payload,
-          confirm_time: nowTime()
-        })
+          ...{
+            confirmed_time: nowTime(),
+            added_Time: local_transaction[i].added_Time
+          }
+        }
+        if (local_transaction[i].summary) {
+          payload.summary = local_transaction[i].summary
+        }
+        if (local_transaction[i].approval) {
+          payload.approval = local_transaction[i].approval
+        }
+        console.log(new_transaction)
+        local_transaction.splice(i, 1, new_transaction)
       }
     }
     state.transactions = [...local_transaction]
-    state.confirm_transactions = state.transactions.filter(item => item.confirm_time)
-    state.pending_transactions = state.transactions.filter(item => item.confirm_time)
+    state.confirm_transactions = state.transactions.filter(item => item.confirmed_time)
+    state.pending_transactions = state.transactions.filter(item => !item.confirmed_time)
     localStorage.setItem('store_transaction', JSON.stringify(state.transactions))
   },
   addTransactions (state, payload) {
@@ -39,12 +50,12 @@ export default {
       ...[{
         ...payload,
         ...{
-          add_time: nowTime()
+          added_Time: nowTime()
         }
       }]
     ]
-    state.confirm_transactions = state.transactions.filter(item => item.confirm_time)
-    state.pending_transactions = state.transactions.filter(item => !item.confirm_time)
+    state.confirm_transactions = state.transactions.filter(item => item.confirmed_time)
+    state.pending_transactions = state.transactions.filter(item => !item.confirmed_time)
     localStorage.setItem('store_transaction', JSON.stringify(state.transactions))
   }
 }
