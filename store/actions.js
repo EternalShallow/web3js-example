@@ -5,9 +5,6 @@ export default {
   updateAccounts (context, item) {
     context.commit('changeAccounts', item)
   },
-  // updateTransactions (context, item) {
-  //   context.commit('changeTransactions', item)
-  // },
   /**
    * approval?: { tokenAddress: string; spender: string }
    * @param context
