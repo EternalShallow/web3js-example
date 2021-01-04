@@ -21,7 +21,7 @@ For detailed explanation on how things work, check out [Nuxt.js docs](https://nu
 
 >assets 下边的文件不能够相互引入但是在 nuxt.config.js 文件里边有先后顺序，下边的可以执行上边的文件
 
-###css配置公共资源（本项目使用scss）
+### css配置公共资源（本项目使用scss）
 > `nuxt.config.js` 下 `styleResources` 可配置 `asset` 全局样式。 如：
 ```
 styleResources: {
@@ -95,9 +95,9 @@ BASE=dev
 >store, axios 文件配置请参考nuxt官方文档本项目引入在 `plugins/index.js` 使用
 
 
-###服务器打包之后的配置 （参考）
+### 服务器打包之后的配置 （参考）
 
-####nuxt.js 服务端部署
+#### nuxt.js 服务端部署
 >1，我会上传 .nuxt static .env.dev .env.prod nuxt.config.js package.json 这些文件
 
 >2，安装node，一般node安装好之后，会有npm ，如果感觉npm资源很慢，可以执行下面这个命令：npm install -g cnpm --registry=https://registry.npm.taobao.org（推荐）
@@ -132,7 +132,7 @@ server {
 
 >7，如果使用pm2 需要在根目录下执行 pm2 start npm --name "sports-v-2" -- run start
 
-###注意点
+### 注意点
 >1.如果启用不了服务，有可能是启用ip的问题，nuxt默认启用的是127.0.0.1这个ip在本地没问题，但是在服务器上有可能就不太灵了，可以把ip换成0.0.0.0，这个ip会自动启用服务器真实ip。
 
 >2.如果安装不了依赖，有可能是node版本问题，可以在服务器上通过node版本管理工具来切换node版本试试。
