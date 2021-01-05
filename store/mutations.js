@@ -1,4 +1,5 @@
-const nowTime = () => new Date().getTime() / 1000
+import { nowTime } from '../utils/function'
+import CheckTransactions from '../utils/web3/checkerTransactions'
 export default {
   changeLoading (state, payload) {
     state.isLoading = payload
@@ -18,16 +19,11 @@ export default {
           ...payload,
           ...{
             confirmed_time: nowTime(),
-            added_Time: local_transaction[i].added_Time
+            added_Time: local_transaction[i].added_Time,
+            summary: local_transaction[i].summary,
+            approval: local_transaction[i].approval
           }
         }
-        if (local_transaction[i].summary) {
-          payload.summary = local_transaction[i].summary
-        }
-        if (local_transaction[i].approval) {
-          payload.approval = local_transaction[i].approval
-        }
-        console.log(new_transaction)
         local_transaction.splice(i, 1, new_transaction)
       }
     }
@@ -57,5 +53,19 @@ export default {
     state.confirm_transactions = state.transactions.filter(item => item.confirmed_time)
     state.pending_transactions = state.transactions.filter(item => !item.confirmed_time)
     localStorage.setItem('store_transaction', JSON.stringify(state.transactions))
+  },
+  initTransactions (state, payload) {
+    state.transactions = payload.transactions || payload
+    state.confirm_transactions = state.transactions.filter(item => item.confirmed_time)
+    state.pending_transactions = state.transactions.filter(item => !item.confirmed_time)
+    localStorage.setItem('store_transaction', JSON.stringify(state.transactions))
+    if (payload.store && payload.web3_http) {
+      // eslint-disable-next-line no-new
+      const check_transactions = new CheckTransactions({
+        web3_http: payload.web3_http,
+        store: payload.store
+      })
+      check_transactions.setInterval()
+    }
   }
 }

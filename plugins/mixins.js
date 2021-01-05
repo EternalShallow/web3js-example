@@ -78,6 +78,7 @@ export default {
         Vue.prototype.$account = accounts[0]
         Vue.prototype.$accounts = accounts
         await that.$store.dispatch('updateAccounts', accounts)
+        that.initTransactions()
         if (!accounts) {
           setTimeout(function () {
             that.initWeb3()
@@ -98,6 +99,40 @@ export default {
         that.resolve(err)
         return that.promise
       }
+    },
+    initTransactions () {
+      this.$store.dispatch('updateTransactions', {
+        web3_http: this.$web3_http,
+        store: this.$store,
+        hash: null,
+        type: 'init'
+      })
+    },
+    sendTransactionEvent (sendEvent, { summary, approval }) {
+      const that = this
+      sendEvent.on('transactionHash', function (hash) {
+        console.log('transactionHash')
+        console.log(hash)
+        that.$store.dispatch('updateTransactions', {
+          hash,
+          web3_http: that.$web3_http,
+          type: 'added',
+          summary,
+          approval
+        })
+      }).on('receipt', function (receipt) {
+        console.log('receipt')
+        console.log(receipt)
+        that.$store.dispatch('updateTransactions', {
+          hash: receipt.transactionHash,
+          web3_http: that.$web3_http,
+          type: 'confirmed'
+        })
+      }).catch(error => {
+        console.log(JSON.stringify(error))
+        that.isApprove = false
+        console.log('授权拒绝')
+      })
     },
     setAccount (val) {},
     closeLoading () {

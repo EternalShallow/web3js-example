@@ -5,6 +5,7 @@ export default class WatchTransactions {
     this.event = config.event || 'allEvents'
     this.store = config.store
     this.web3_http = config.web3_http
+    this.web3 = config.web3
     this.time = config.time || 2000
     this.internal_transactions = null
   }
@@ -15,36 +16,51 @@ export default class WatchTransactions {
     console.log(that.account)
     console.log(that.contract)
     console.log(that.event)
-    // that.internal_transactions = setInterval(function () {
-    const allEvents = that.contract.events.allEvents({
-      filter: {
-        owner: that.account,
-        address: that.account,
-        user: that.account
-      },
+    const subscription = that.web3_http.eth.subscribe('logs', {
       address: that.account,
-      fromBlock: 0,
-      toBlock: 'latest',
       topics: []
+    }, (err, res) => {
+      console.log(res)
+      if (err) console.error(err)
     })
-
-    allEvents
-      .on('data', (event) => {
-        // console.log(event)
+    console.log('[+] Watching transactions...')
+    subscription
+      .on('data', (txHash) => {
+        console.log(txHash)
       })
       .on('changed', (data) => {
-        console.log('changed', data)
-        that.store.dispatch('updateTransactions', {
-          hash: data.hash,
-          web3_http: that.web3_http,
-          type: 'confirmed'
-        })
         console.log(data)
       })
       .on('connected', (subscriptionId) => {
         console.log(subscriptionId)
       })
-      .on('error', console.error)
+      .on('error', (data) => {
+        console.log(data)
+      })
+    // that.internal_transactions = setInterval(function () {
+    // const allEvents = that.contract.events.allEvents({
+    //   address: that.account,
+    //   fromBlock: 0,
+    //   toBlock: 'latest'
+    // })
+    //
+    // allEvents
+    //   .on('data', (event) => {
+    //     console.log(event)
+    //   })
+    //   .on('changed', (data) => {
+    //     console.log('changed', data)
+    //     that.store.dispatch('updateTransactions', {
+    //       hash: data.hash,
+    //       web3_http: that.web3_http,
+    //       type: 'confirmed'
+    //     })
+    //     console.log(data)
+    //   })
+    //   .on('connected', (subscriptionId) => {
+    //     console.log(subscriptionId)
+    //   })
+    //   .on('error', console.error)
   }
 
   clearInterval () {

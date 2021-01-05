@@ -1,4 +1,7 @@
 /* eslint-disable */
+export function nowTime () {
+  return Math.floor(new Date().getTime() / 1000)
+}
 
 /**
  * 数组对象去重

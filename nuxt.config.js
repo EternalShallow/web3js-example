@@ -24,7 +24,8 @@ export default {
       { hid: 'description', name: 'description', content: '' }
     ],
     link: [
-      { rel: 'icon', type: 'image/png', href: base + 'yswap@2x.png' }
+      { rel: 'icon', type: 'image/png', href: base + 'yswap@2x.png' },
+      { rel: 'stylesheet', type: 'text/css', href: 'https://cdn.jsdelivr.net/npm/@mdi/font@5.x/css/materialdesignicons.min.css' }
     ],
     script: [
       { src: base + 'rem/flexible.js', type: 'text/javascript', charset: 'utf-8' }
