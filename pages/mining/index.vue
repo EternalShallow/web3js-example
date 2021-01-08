@@ -11,6 +11,7 @@
       <y-btn class="mt24" :color="'select'" @submitAction="connectWallet">Connect Wallet</y-btn>
       <y-btn class="mt24" :color="'select'" @submitAction="transactionETH">Transaction ETH</y-btn>
       <y-btn class="mt24" :color="'select'" @submitAction="approve">Approve</y-btn>
+      <y-btn class="mt24" :color="'select'" @submitAction="approveLibrary">ApproveLibrary</y-btn>
       <y-btn class="mt24" :color="'select'" @submitAction="stake">Stake</y-btn>
     </div>
   </div>

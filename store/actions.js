@@ -1,12 +1,14 @@
 import { nowTime } from '../utils/function'
+import { TRANSACTION_ACTIONS } from '../utils/web3/constants'
+import { localTransaction } from '../utils/local/vuexLocal'
 async function getPayload ({ hash, web3_http, type }) {
   let payload = {}
   let transaction_by_hash = await web3_http.eth.getTransaction(hash)
-  if (transaction_by_hash.blockNumber) {
+  if (transaction_by_hash.blockHash) {
     transaction_by_hash = await web3_http.eth.getTransactionReceipt(hash)
     if (type === 'init') {
       payload = {
-        confirmed_time: nowTime()
+        confirmedTime: nowTime()
       }
     }
   }
@@ -49,12 +51,19 @@ export default {
    * @param store
    * @returns {Promise<void>}
    */
-  async updateTransactions (context, { hash, web3_http, summary, approval, type, store }) {
+  async updateTransactions (context, { hash, summary, approval, type, store }) {
+    let web3_http = null
+    if (process.client) {
+      web3_http = window.$nuxt.$web3_http
+    }
+    if (!web3_http) {
+      return
+    }
     try {
       let payload
       let latest_block
       switch (type) {
-        case 'added':
+        case TRANSACTION_ACTIONS.ADDED:
           payload = await getPayload({ hash, web3_http, type })
           latest_block = await web3_http.eth.getBlock('latest')
           payload.lastCheckedBlockNumber = latest_block.number
@@ -68,21 +77,28 @@ export default {
             ...payload,
             ...{
               summary,
-              approval
+              approval,
+              addedTime: nowTime()
             }
           }
           context.commit('addTransactions', payload)
           break
-        case 'confirmed':
+        case TRANSACTION_ACTIONS.CONFIRMED:
           payload = await getPayload({ hash, web3_http, type })
+          payload = {
+            ...payload,
+            ...{
+              confirmedTime: nowTime()
+            }
+          }
           context.commit('changeTransactions', payload)
           break
-        case 'init':
-          var local_transaction = JSON.parse(localStorage.getItem('store_transaction'))
+        case TRANSACTION_ACTIONS.INIT:
+          var local_transaction = localTransaction.get()
           if (!local_transaction) {
             return
           }
-          var pending_transactions = local_transaction.filter(item => !item.confirmed_time)
+          var pending_transactions = local_transaction.filter(item => !item.confirmedTime)
           if (pending_transactions.length < 1) {
             context.commit('initTransactions', local_transaction)
             return
@@ -94,22 +110,18 @@ export default {
               {
                 ...transaction_info,
                 ...{
-                  added_Time: item.added_Time,
+                  addedTime: item.addedTime,
                   summary: item.summary,
                   approval: item.approval
                 }
               }
             )
           }
-          var confirm_transactions = local_transaction.filter(item => item.confirmed_time)
-          context.commit('initTransactions', {
-            store: store,
-            web3_http: web3_http,
-            transactions: [
-              ...confirm_transactions,
-              ...new_pending_transactions
-            ]
-          })
+          var confirm_transactions = local_transaction.filter(item => item.confirmedTime)
+          context.commit('initTransactions', [
+            ...confirm_transactions,
+            ...new_pending_transactions
+          ])
           break
       }
     } catch (e) {

@@ -158,7 +158,9 @@ export default {
           // 移动端某些浏览器初始化控制台报错，不影响使用
           try {
             this.$el.scrollTo(0, this.$el.scrollHeight)
-          } catch (e) {}
+          } catch (e) {
+            console.log(e)
+          }
           // this.$el.scrollTop = this.$el.scrollHeight
         })
         this.$emit('bottom-method')

@@ -2,6 +2,7 @@ import Vue from 'vue'
 import { mapState } from 'vuex'
 import { getWeb3 } from '../utils/web3/getWeb3'
 import COIN_ABI from '../utils/web3/coinABI'
+import { TRANSACTION_ACTIONS } from '../utils/web3/constants'
 export default {
   computed: {
     'store.state.accounts': function () {
@@ -36,10 +37,11 @@ export default {
           that.initWeb3()
         }, 500)
       }
-      const { web3, web3_http } = await getWeb3()
+      const { web3, web3_http, library } = await getWeb3()
       try {
         Vue.prototype.$web3_http = web3_http
         Vue.prototype.$web3 = web3
+        Vue.prototype.$library = library
         // usdt 机枪池合约初始化 需要连接主网
         // Vue.prototype.$COIN = new web3.eth.Contract(
         //   COIN_ABI.coin_abi_USDT,
@@ -102,10 +104,8 @@ export default {
     },
     initTransactions () {
       this.$store.dispatch('updateTransactions', {
-        web3_http: this.$web3_http,
-        store: this.$store,
         hash: null,
-        type: 'init'
+        type: TRANSACTION_ACTIONS.INIT
       })
     },
     sendTransactionEvent (sendEvent, { summary, approval }) {
@@ -115,8 +115,7 @@ export default {
         console.log(hash)
         that.$store.dispatch('updateTransactions', {
           hash,
-          web3_http: that.$web3_http,
-          type: 'added',
+          type: TRANSACTION_ACTIONS.ADDED,
           summary,
           approval
         })
@@ -125,8 +124,7 @@ export default {
         console.log(receipt)
         that.$store.dispatch('updateTransactions', {
           hash: receipt.transactionHash,
-          web3_http: that.$web3_http,
-          type: 'confirmed'
+          type: TRANSACTION_ACTIONS.CONFIRMED
         })
       }).catch(error => {
         console.log(JSON.stringify(error))

@@ -1,15 +1,26 @@
+import { TRANSACTION_ACTIONS } from './constants'
+
 export default class CheckTransactions {
   constructor (config) {
-    this.store = config.store
-    this.web3_http = config.web3_http
+    config = config || {}
+    this.store = null
+    this.web3_http = null
     this.time = config.time || 2000
-    this.transactions_len = config.store.state.pending_transactions.length
+    this.transactions_len = 0
     this.internal_transactions = null
   }
 
   async setInterval () {
     const that = this
     that.clearInterval()
+    if (process.client) {
+      that.web3_http = window.$nuxt.$web3_http
+      that.store = window.$nuxt.$store
+    }
+    if (!that.web3_http || !that.store) {
+      return
+    }
+    that.transactions_len = that.store.state.pending_transactions.length
     if (that.transactions_len < 1) {
       return
     }
@@ -18,11 +29,10 @@ export default class CheckTransactions {
       for (let i = 0; i < that.transactions_len; i++) {
         const hash = that.pending_transactions[i].hash
         const transaction = await that.web3_http.eth.getTransaction(hash)
-        if (!transaction.blockHash) {
+        if (transaction.blockHash) {
           that.store.dispatch('updateTransactions', {
             hash: transaction.hash,
-            web3_http: that.web3_http,
-            type: 'confirmed'
+            type: TRANSACTION_ACTIONS.CONFIRMED
           })
         }
       }

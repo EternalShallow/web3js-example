@@ -14,6 +14,7 @@ Axios.defaults.timeout = 10000
 Axios.defaults.withCredentials = false
 
 function postJsonIndicator (url, params, successFun, failFun, errorFun, showIndicator) {
+  // eslint-disable-next-line no-empty
   if (showIndicator) {
   }
   var req = {
@@ -97,6 +98,7 @@ export default {
     postJsonIndicator(url, params, successFun, failFun, errorFun, true)
   },
   postJsonIndicator: function (url, params, successFun, failFun, errorFun, showIndicator) {
+    // eslint-disable-next-line no-empty
     if (showIndicator) {
     }
     var req = {
@@ -134,6 +136,7 @@ export default {
     }
     Axios(req).catch(
       function (err) {
+        // eslint-disable-next-line no-empty
         if (typeof errorFun === 'function') {
         } else {
           messageError(err.response && err.response.data.msg ? err.response.data.msg : '服务器通讯异常，请检查网络')

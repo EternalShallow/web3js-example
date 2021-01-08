@@ -1,5 +1,5 @@
-import { nowTime } from '../utils/function'
 import CheckTransactions from '../utils/web3/checkerTransactions'
+import { localTransaction } from '../utils/local/vuexLocal'
 export default {
   changeLoading (state, payload) {
     state.isLoading = payload
@@ -9,33 +9,28 @@ export default {
   },
   changeTransactions (state, payload) {
     let local_transaction = []
-    if (localStorage.getItem('store_transaction')) {
-      local_transaction = JSON.parse(localStorage.getItem('store_transaction'))
+    if (localTransaction.get()) {
+      local_transaction = localTransaction.get()
     }
     const transaction_len = local_transaction.length
     for (let i = 0; i < transaction_len; i++) {
       if (local_transaction[i].hash === payload.hash) {
         const new_transaction = {
-          ...payload,
-          ...{
-            confirmed_time: nowTime(),
-            added_Time: local_transaction[i].added_Time,
-            summary: local_transaction[i].summary,
-            approval: local_transaction[i].approval
-          }
+          ...local_transaction[i],
+          ...payload
         }
         local_transaction.splice(i, 1, new_transaction)
       }
     }
     state.transactions = [...local_transaction]
-    state.confirm_transactions = state.transactions.filter(item => item.confirmed_time)
-    state.pending_transactions = state.transactions.filter(item => !item.confirmed_time)
-    localStorage.setItem('store_transaction', JSON.stringify(state.transactions))
+    state.confirm_transactions = state.transactions.filter(item => item.confirmedTime)
+    state.pending_transactions = state.transactions.filter(item => !item.confirmedTime)
+    localTransaction.set()
   },
   addTransactions (state, payload) {
     let local_transaction = []
-    if (localStorage.getItem('store_transaction')) {
-      local_transaction = JSON.parse(localStorage.getItem('store_transaction'))
+    if (localTransaction.get()) {
+      local_transaction = localTransaction.get()
     }
     const same_hash = local_transaction.filter(item => item.hash === payload.hash)
     if (same_hash.length > 0) {
@@ -43,29 +38,18 @@ export default {
     }
     state.transactions = [
       ...local_transaction,
-      ...[{
-        ...payload,
-        ...{
-          added_Time: nowTime()
-        }
-      }]
+      ...[{ ...payload }]
     ]
-    state.confirm_transactions = state.transactions.filter(item => item.confirmed_time)
-    state.pending_transactions = state.transactions.filter(item => !item.confirmed_time)
-    localStorage.setItem('store_transaction', JSON.stringify(state.transactions))
+    state.confirm_transactions = state.transactions.filter(item => item.confirmedTime)
+    state.pending_transactions = state.transactions.filter(item => !item.confirmedTime)
+    localTransaction.set()
   },
   initTransactions (state, payload) {
-    state.transactions = payload.transactions || payload
-    state.confirm_transactions = state.transactions.filter(item => item.confirmed_time)
-    state.pending_transactions = state.transactions.filter(item => !item.confirmed_time)
-    localStorage.setItem('store_transaction', JSON.stringify(state.transactions))
-    if (payload.store && payload.web3_http) {
-      // eslint-disable-next-line no-new
-      const check_transactions = new CheckTransactions({
-        web3_http: payload.web3_http,
-        store: payload.store
-      })
-      check_transactions.setInterval()
-    }
+    state.transactions = payload
+    state.confirm_transactions = state.transactions.filter(item => item.confirmedTime)
+    state.pending_transactions = state.transactions.filter(item => !item.confirmedTime)
+    localTransaction.set()
+    const check_transactions = new CheckTransactions()
+    check_transactions.setInterval()
   }
 }
