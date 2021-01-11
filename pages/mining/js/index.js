@@ -2,7 +2,10 @@ import {
   keepPoint,
   numSub
 } from '../../../utils/function'
-import { getGasPrice } from '../../../utils/web3/web3Utils'
+import { getGasPrice, getMiningInfo, useTokenContractWeb3 } from '../../../utils/web3/web3Utils'
+import { approveEvent } from '../../../utils/web3/contractApprove'
+import { sendTransactionEvent } from '../../../utils/web3/contractEvent'
+import COIN_ABI from '../../../utils/web3/coinABI'
 let that
 export default {
   name: 'index',
@@ -34,7 +37,9 @@ export default {
       },
       balance_eth_accounts: [],
       transactions: [],
-      account: null
+      account: null,
+      univ2Contract: null,
+      reawordPoolContract: null
     }
   },
   mounted () {
@@ -66,7 +71,7 @@ export default {
       if (that.$account) {
         console.log(that.$web3_http)
         that.account = that.$account
-        that.getBalanceInfo()
+        that.initContract()
       }
     },
     async connectWallet () {
@@ -80,41 +85,21 @@ export default {
         await that.getBalanceInfo()
       }
     },
+    initContract () {
+      that.univ2Contract = useTokenContractWeb3(COIN_ABI.coin_abi_UNIV2, process.env.coin_UNIV2_YF_USDT)
+      that.reawordPoolContract = useTokenContractWeb3(COIN_ABI.abi_reaword_pool, process.env.pool_coin_UNIV2_YF_USDT)
+      that.getBalanceInfo()
+    },
     async getBalanceInfo () {
       try {
-        if (that.balance_eth_accounts.length < 1) {
-          if (that.$accounts.length > 0) {
-            for (let i = 0; i < that.$accounts.length; i++) {
-              const account_info = {
-                account: that.$accounts[i],
-                balance: keepPoint(that.$web3_http.utils.fromWei(await that.$web3_http.eth.getBalance(that.$account), 'ether'), 6)
-              }
-              that.balance_eth_accounts.push(account_info)
-            }
-          } else {
-            return
-          }
-        }
-        const balance_univ2 = await that.$UNIV2.methods.balanceOf(that.$account).call()
-        // univ2 未质押数量
-        that.balance_UNIV2.balance_univ2_wei = balance_univ2
-        that.balance_UNIV2.balance_univ2_original = that.$web3_http.utils.fromWei(balance_univ2, that.wei)
-        that.balance_UNIV2.balance_univ2 = keepPoint(that.balance_UNIV2.balance_univ2_original, that.default_point)
-        // 可取YF数量
-        const balance_yf_eran = await that.$REAWORDPOOL.methods.earned(that.$account).call()
-        that.balance_UNIV2.balance_yf_eran_original = that.$web3_http.utils.fromWei(balance_yf_eran, that.wei)
-        that.balance_UNIV2.balance_yf_eran = keepPoint(that.balance_UNIV2.balance_yf_eran_original, that.default_point)
-        // univ2 质押数量
-        const balance_univ2_stake = await that.$REAWORDPOOL.methods.balanceOf(that.$account).call()
-        console.log(balance_univ2_stake)
-        that.balance_UNIV2.balance_univ2_stake_wei = balance_univ2_stake
-        that.balance_UNIV2.balance_univ2_stake_original = that.$web3_http.utils.fromWei(balance_univ2_stake, that.wei)
-        that.balance_UNIV2.balance_univ2_stake = keepPoint(that.balance_UNIV2.balance_univ2_stake_original, that.default_point)
-        const balance_yf = await that.$YF.methods.balanceOf(that.$account).call()
-        console.log('balance_yf', keepPoint(that.$web3_http.utils.fromWei(balance_yf, 'ether')))
-        that.total_yf_info.total_yf_earn = keepPoint(that.$web3_http.utils.fromWei(await that.$REAWORDPOOL.methods.rewardPerToken().call(), that.wei), that.default_point)
+        that.balance_UNIV2 = getMiningInfo({
+          univ2Contract: that.univ2Contract,
+          reawordPoolContract: that.reawordPoolContract,
+          default_point: that.default_point,
+          wei: that.wei
+        })
+        that.total_yf_info.total_yf_earn = keepPoint(that.$web3_http.utils.fromWei(await that.reawordPoolContract.methods.rewardPerToken().call(), that.wei), that.default_point)
         that.total_yf_info.total_yf_remain = keepPoint(numSub(that.total_yf_info.total_supply, that.total_yf_info.total_yf_earn), that.default_point)
-        console.log(that.balance_UNIV2)
       } catch (e) {
         console.log(e)
         console.log('获取univ2资产信息失败')
@@ -122,7 +107,7 @@ export default {
     },
     async transactionETH () {
       const get_gas_price = await that.$web3_http.eth.getGasPrice()
-      that.sendTransactionEvent(
+      sendTransactionEvent(
         that.$web3_http.eth.sendTransaction({
           from: that.$account,
           to: '0xb55AdD32e4608Eb7965eC234E6C0b3f009c3d9D6',
@@ -136,8 +121,8 @@ export default {
       )
     },
     async approve () {
-      that.sendTransactionEvent(
-        that.$UNIV2.methods.approve(process.env.coin_UNIV2_YF_USDT, that.balance_UNIV2.balance_univ2_stake_wei).send({
+      sendTransactionEvent(
+        that.univ2Contract.methods.approve(process.env.coin_UNIV2_YF_USDT, that.balance_UNIV2.balance_univ2_stake_wei).send({
           from: that.$account,
           gasPrice: await getGasPrice()
         }),
@@ -148,7 +133,7 @@ export default {
       )
     },
     async approveLibrary () {
-      that.approveEvent(process.env.coin_UNIV2_YF_USDT, {
+      approveEvent(process.env.coin_UNIV2_YF_USDT, {
         approve_amount: that.balance_UNIV2.balance_univ2_stake_original,
         symbol: 'YF',
         address: process.env.coin_address_YF,
