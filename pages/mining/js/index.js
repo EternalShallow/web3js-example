@@ -2,8 +2,7 @@ import {
   keepPoint,
   numSub
 } from '../../../utils/function'
-import { MaxUint256 } from '@ethersproject/constants'
-import { calculateGasMargin, getGasPrice, useTokenContract } from '../../../utils/web3/web3Utils'
+import { getGasPrice } from '../../../utils/web3/web3Utils'
 let that
 export default {
   name: 'index',
@@ -143,37 +142,18 @@ export default {
           gasPrice: await getGasPrice()
         }),
         {
-          summary: `Approve ${that.balance_UNIV2.balance_univ2_stake}`,
+          summary: 'Approve YF',
           approval: { tokenAddress: process.env.coin_address_YF, spender: process.env.coin_UNIV2_YF_USDT }
         }
       )
     },
     async approveLibrary () {
-      const spender = process.env.coin_UNIV2_YF_USDT
-      const tokenContract = useTokenContract(spender)
-      let useExact = false
-      // const get_gas_price = await that.$web3_http.eth.getGasPrice()
-      const estimatedGas = await tokenContract.estimateGas.approve(spender, MaxUint256).catch(() => {
-        // general fallback for tokens who restrict approval amounts
-        useExact = true
-        return tokenContract.estimateGas.approve(spender, that.balance_UNIV2.balance_univ2_stake_wei)
+      that.approveEvent(process.env.coin_UNIV2_YF_USDT, {
+        approve_amount: that.balance_UNIV2.balance_univ2_stake_original,
+        symbol: 'YF',
+        address: process.env.coin_address_YF,
+        wei: 'ether'
       })
-      console.log(estimatedGas)
-      tokenContract
-        .approve(spender, useExact ? that.balance_UNIV2.balance_univ2_stake_wei : MaxUint256, {
-          gasLimit: calculateGasMargin(estimatedGas),
-          gasPrice: await getGasPrice()
-        })
-        .then((response) => {
-          console.log(response)
-          response.wait(confirmations => {
-            console.log(confirmations)
-          })
-        })
-        .catch((error) => {
-          console.error('Failed to approve token', error)
-          throw error
-        })
     },
     stake () {}
   }

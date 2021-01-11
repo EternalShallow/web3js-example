@@ -2,9 +2,15 @@ import JSBI from 'jsbi'
 // eslint-disable-next-line no-undef
 export const BigintIsh = JSBI || BigInt || String
 export const TRANSACTION_ACTIONS = {
-  INIT: 'init',
-  CONFIRMED: 'confirmed',
-  ADDED: 'added'
+  INIT: 'INIT',
+  CONFIRMED: 'CONFIRMED',
+  ADDED: 'ADDED'
+}
+export const APPROVE_STATUS = {
+  PENDING: 'PENDING',
+  NOT_APPROVED: 'NOT_APPROVED',
+  APPROVED: 'APPROVED',
+  UNKNOWN: 'UNKNOWN'
 }
 export const LOCAL_PREFIX_VUEX = 'vuex_localstorage_'
 export const ChainId = {

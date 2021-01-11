@@ -3,6 +3,8 @@ import { mapState } from 'vuex'
 import { getWeb3 } from '../utils/web3/getWeb3'
 import COIN_ABI from '../utils/web3/coinABI'
 import { TRANSACTION_ACTIONS } from '../utils/web3/constants'
+import { calculateGasMargin, getGasPrice, useTokenContract } from '../utils/web3/web3Utils'
+import { MaxUint256 } from '@ethersproject/constants'
 export default {
   computed: {
     'store.state.accounts': function () {
@@ -112,7 +114,6 @@ export default {
       const that = this
       sendEvent.on('transactionHash', function (hash) {
         console.log('transactionHash')
-        console.log(hash)
         that.$store.dispatch('updateTransactions', {
           hash,
           type: TRANSACTION_ACTIONS.ADDED,
@@ -121,7 +122,6 @@ export default {
         })
       }).on('receipt', function (receipt) {
         console.log('receipt')
-        console.log(receipt)
         that.$store.dispatch('updateTransactions', {
           hash: receipt.transactionHash,
           type: TRANSACTION_ACTIONS.CONFIRMED
@@ -130,6 +130,67 @@ export default {
         console.log(JSON.stringify(error))
         that.isApprove = false
         console.log('授权拒绝')
+      })
+    },
+    async approveEvent (spender, token) {
+      const that = this
+      if (!spender) {
+        console.error('no spender')
+        return
+      }
+      if (!token) {
+        console.error('no token')
+        return
+      }
+      if (!token.approve_amount) {
+        console.error('missing amount to approve')
+        return
+      }
+      const tokenContract = useTokenContract(spender)
+      if (!tokenContract) {
+        console.error('tokenContract is null')
+        return
+      }
+      console.log(tokenContract)
+      let useExact = false
+      const estimated_gas = await tokenContract.estimateGas.approve(spender, MaxUint256).catch(() => {
+        // general fallback for tokens who restrict approval amounts
+        useExact = true
+        return tokenContract.estimateGas.approve(spender, that.balance_UNIV2.balance_univ2_stake_wei)
+      })
+      const approve_amount = that.$web3_http.utils.fromWei(token.approve_amount, token.wei)
+      tokenContract
+        .approve(spender, useExact ? approve_amount : MaxUint256, {
+          gasLimit: calculateGasMargin(estimated_gas),
+          gasPrice: await getGasPrice()
+        })
+        .then((response) => {
+          that.useCallback(response, {
+            summary: 'Approve ' + token.symbol,
+            approval: { tokenAddress: token.address, spender: spender }
+          })
+        })
+        .catch((error) => {
+          console.error('Failed to approve token', error)
+          throw error
+        })
+    },
+    useCallback (response, { summary, approval }) {
+      const that = this
+      const { hash } = response
+      that.$store.dispatch('updateTransactions', {
+        hash,
+        type: TRANSACTION_ACTIONS.ADDED,
+        summary,
+        approval
+      })
+      response.wait().then(res => {
+        console.log(res)
+        const { transactionHash } = res
+        that.$store.dispatch('updateTransactions', {
+          hash: transactionHash,
+          type: TRANSACTION_ACTIONS.CONFIRMED
+        })
       })
     },
     setAccount (val) {},
