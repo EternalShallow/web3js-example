@@ -3,34 +3,39 @@ import { TRANSACTION_ACTIONS } from '../utils/web3/constants'
 import { localTransaction } from '../utils/local/vuexLocal'
 async function getPayload ({ hash, web3_http, type }) {
   let payload = {}
-  let transaction_by_hash = await web3_http.eth.getTransaction(hash)
-  if (transaction_by_hash.blockHash) {
-    transaction_by_hash = await web3_http.eth.getTransactionReceipt(hash)
-    if (type === 'init') {
-      payload = {
-        confirmedTime: nowTime()
+  try {
+    let transaction_by_hash = await web3_http.eth.getTransaction(hash)
+    if (transaction_by_hash.blockHash) {
+      transaction_by_hash = await web3_http.eth.getTransactionReceipt(hash)
+      if (type === 'init') {
+        payload = {
+          confirmedTime: nowTime()
+        }
       }
     }
-  }
-  const receipt = {
-    to: transaction_by_hash.to,
-    from: transaction_by_hash.from,
-    contractAddress: transaction_by_hash.contractAddress,
-    transactionIndex: transaction_by_hash.transactionIndex,
-    blockHash: transaction_by_hash.blockHash,
-    transactionHash: hash,
-    blockNumber: transaction_by_hash.blockNumber,
-    status: transaction_by_hash.status
-  }
-  payload = {
-    ...payload,
-    ...{
-      hash: hash,
-      from: receipt.from,
-      receipt: receipt
+    const receipt = {
+      to: transaction_by_hash.to,
+      from: transaction_by_hash.from,
+      contractAddress: transaction_by_hash.contractAddress,
+      transactionIndex: transaction_by_hash.transactionIndex,
+      blockHash: transaction_by_hash.blockHash,
+      transactionHash: hash,
+      blockNumber: transaction_by_hash.blockNumber,
+      status: transaction_by_hash.status
     }
+    payload = {
+      ...payload,
+      ...{
+        hash: hash,
+        from: receipt.from,
+        receipt: receipt
+      }
+    }
+    return payload
+  } catch (e) {
+    console.log(e)
+    return null
   }
-  return payload
 }
 
 export default {

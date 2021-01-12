@@ -2,10 +2,11 @@ import {
   keepPoint,
   numSub
 } from '../../../utils/function'
-import { getGasPrice, getMiningInfo, useTokenContractWeb3 } from '../../../utils/web3/web3Utils'
+import { getGasPrice, getMiningInfo, useTokenContract, useTokenContractWeb3 } from '../../../utils/web3/web3Utils'
 import { approveEvent } from '../../../utils/web3/contractApprove'
-import { sendTransactionEvent } from '../../../utils/web3/contractEvent'
+import { sendTransactionEvent, useContractMethods } from '../../../utils/web3/contractEvent'
 import COIN_ABI from '../../../utils/web3/coinABI'
+
 let that
 export default {
   name: 'index',
@@ -92,7 +93,8 @@ export default {
     },
     async getBalanceInfo () {
       try {
-        that.balance_UNIV2 = getMiningInfo({
+        console.log(await that.$web3_http.eth.getTransactionReceipt('0x03276c6b5b6fd0d413b82fa651d713f0a5f731f1e4b8cd2ee9819697ace3cf4b'))
+        that.balance_UNIV2 = await getMiningInfo({
           univ2Contract: that.univ2Contract,
           reawordPoolContract: that.reawordPoolContract,
           default_point: that.default_point,
@@ -122,24 +124,48 @@ export default {
     },
     async approve () {
       sendTransactionEvent(
-        that.univ2Contract.methods.approve(process.env.coin_UNIV2_YF_USDT, that.balance_UNIV2.balance_univ2_stake_wei).send({
-          from: that.$account,
-          gasPrice: await getGasPrice()
+        that.univ2Contract.methods.approve(process.env.pool_coin_UNIV2_YF_USDT, that.balance_UNIV2.balance_univ2_stake_wei).send({
+          ...{
+            from: that.$account
+          },
+          ...await getGasPrice()
         }),
         {
           summary: 'Approve YF',
-          approval: { tokenAddress: process.env.coin_address_YF, spender: process.env.coin_UNIV2_YF_USDT }
+          approval: {
+            tokenAddress: process.env.coin_address_YF,
+            spender: process.env.coin_UNIV2_YF_USDT
+          }
         }
       )
     },
     async approveLibrary () {
-      approveEvent(process.env.coin_UNIV2_YF_USDT, {
-        approve_amount: that.balance_UNIV2.balance_univ2_stake_original,
-        symbol: 'YF',
-        address: process.env.coin_address_YF,
+      console.log(that.balance_UNIV2)
+      approveEvent(process.env.pool_coin_UNIV2_YF_USDT, {
+        approve_amount: that.balance_UNIV2.balance_univ2_original,
+        symbol: 'UNIV2',
+        address: process.env.coin_UNIV2_YF_USDT,
         wei: 'ether'
       })
     },
-    stake () {}
+    async stake () {
+      sendTransactionEvent(
+        that.reawordPoolContract.methods.stake(that.balance_UNIV2.balance_univ2_wei).send({
+          from: that.$account
+        }),
+        {
+          summary: 'Stake univ2'
+        }
+      )
+    },
+    async stakeLibrary () {
+      const contract = useTokenContract(process.env.pool_coin_UNIV2_YF_USDT, COIN_ABI.abi_reaword_pool)
+      await useContractMethods({
+        contract,
+        methodName: 'stake',
+        parameters: that.balance_UNIV2.balance_univ2_wei,
+        summary: 'Stake UNIV2'
+      })
+    }
   }
 }

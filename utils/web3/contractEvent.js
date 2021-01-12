@@ -1,4 +1,5 @@
 import { TRANSACTION_ACTIONS } from './constants'
+import { getGasLimit } from './web3Utils'
 
 export function useCallback (response, { summary, approval }) {
   if (process.client) {
@@ -39,8 +40,43 @@ export function sendTransactionEvent (sendEvent, { summary, approval }) {
         type: TRANSACTION_ACTIONS.CONFIRMED
       })
     }).catch(error => {
-      console.log(JSON.stringify(error))
-      console.log('授权拒绝')
+      console.log(error)
+      if (error?.code === 4001) {
+        console.log('Transaction rejected.')
+      } else {
+        const errInfo = JSON.parse(JSON.stringify(error))
+        console.log(errInfo)
+        console.log(`actions is failed: ${error.message}`)
+        if (errInfo.receipt.transactionHash) {
+          $store.dispatch('updateTransactions', {
+            hash: errInfo.receipt.transactionHash,
+            type: TRANSACTION_ACTIONS.CONFIRMED
+          })
+        }
+      }
     })
   }
+}
+
+export async function useContractMethods ({ contract, methodName, parameters, summary }) {
+  if (!contract) {
+    console.error('no contract')
+    return
+  }
+  if (!methodName) {
+    console.error('no methodName')
+    return
+  }
+  const estimatedGas = await getGasLimit(contract, methodName, parameters)
+  contract[methodName](parameters, {
+    ...estimatedGas
+  })
+    .then((response) => {
+      useCallback(response, {
+        summary: summary
+      })
+    })
+    .catch((error) => {
+      console.error('Failed to approve token', error)
+    })
 }

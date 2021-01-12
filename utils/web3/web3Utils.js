@@ -2,18 +2,47 @@ import { BigNumber } from '@ethersproject/bignumber'
 import { Contract } from '@ethersproject/contracts'
 import { getAddress } from '@ethersproject/address'
 import { AddressZero } from '@ethersproject/constants'
-import COIN_ABI from './coinABI'
 import { keepPoint } from '../function'
 // add 10%
 export function calculateGasMargin (value) {
   return value.mul(BigNumber.from(10000).add(BigNumber.from(1000))).div(BigNumber.from(10000))
 }
 
+/**
+ * 获取 GasPrice
+ * @returns {Promise<{gasPrice: string}|{}>}
+ */
 export async function getGasPrice () {
   if (process.client) {
     const { $web3_http } = window.$nuxt
-    const get_gas_price = await $web3_http.eth.getGasPrice()
-    return '0x' + get_gas_price.toString(16)
+    try {
+      const get_gas_price = await $web3_http.eth.getGasPrice()
+      return {
+        gasPrice: '0x' + get_gas_price.toString(16)
+      }
+    } catch (e) {
+      console.error(e.message)
+      return {}
+    }
+  }
+}
+
+/**
+ * 获取 GasLimit
+ * @param contract
+ * @param methodName
+ * @param parameters
+ * @returns {Promise<{}|{gasLimit: *}>}
+ */
+export async function getGasLimit (contract, methodName, parameters) {
+  try {
+    const estimatedGas = await contract.estimateGas[methodName](parameters)
+    return {
+      gasLimit: calculateGasMargin(estimatedGas)
+    }
+  } catch (e) {
+    console.error(e.message)
+    return {}
   }
 }
 
@@ -26,8 +55,8 @@ export function isAddress (value) {
   }
 }
 
-export function useTokenContract (tokenAddress, withSignerIfPossible) {
-  return useContract(tokenAddress, COIN_ABI.coin_abi_UNIV2, withSignerIfPossible)
+export function useTokenContract (tokenAddress, ABI, withSignerIfPossible) {
+  return useContract(tokenAddress, ABI, withSignerIfPossible)
 }
 
 export function useTokenContractWeb3 (ABI, tokenAddress) {
