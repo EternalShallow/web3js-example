@@ -2,7 +2,14 @@ import {
   keepPoint,
   numSub
 } from '../../../utils/function'
-import { getGasPrice, getMiningInfo, useTokenContract, useTokenContractWeb3 } from '../../../utils/web3/web3Utils'
+import {
+  getGasPrice,
+  getMiningInfo,
+  getMiningLibraryInfo,
+  useTokenContract, useTokenContractReawordPool,
+  useTokenContractUniv2,
+  useTokenContractWeb3
+} from '../../../utils/web3/web3Utils'
 import { approveEvent } from '../../../utils/web3/contractApprove'
 import { sendTransactionEvent, useContractMethods } from '../../../utils/web3/contractEvent'
 import COIN_ABI from '../../../utils/web3/coinABI'
@@ -93,13 +100,23 @@ export default {
     },
     async getBalanceInfo () {
       try {
-        console.log(await that.$web3_http.eth.getTransactionReceipt('0x03276c6b5b6fd0d413b82fa651d713f0a5f731f1e4b8cd2ee9819697ace3cf4b'))
+        const uniTokenContract = useTokenContractUniv2(process.env.coin_UNIV2_YF_USDT)
+        const reawordPoolContract = useTokenContractReawordPool(process.env.pool_coin_UNIV2_YF_USDT)
+        const value = await uniTokenContract.balanceOf(that.$account)
+        console.log(value.toString())
         that.balance_UNIV2 = await getMiningInfo({
           univ2Contract: that.univ2Contract,
           reawordPoolContract: that.reawordPoolContract,
           default_point: that.default_point,
           wei: that.wei
         })
+        const balance_info = await getMiningLibraryInfo({
+          univ2Contract: uniTokenContract,
+          reawordPoolContract: reawordPoolContract,
+          default_point: that.default_point,
+          wei: that.wei
+        })
+        console.log(balance_info)
         that.total_yf_info.total_yf_earn = keepPoint(that.$web3_http.utils.fromWei(await that.reawordPoolContract.methods.rewardPerToken().call(), that.wei), that.default_point)
         that.total_yf_info.total_yf_remain = keepPoint(numSub(that.total_yf_info.total_supply, that.total_yf_info.total_yf_earn), that.default_point)
       } catch (e) {
