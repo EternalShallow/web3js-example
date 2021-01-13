@@ -116,6 +116,7 @@ export async function getGasLimit (contract, methodName, parameters) {
     return {}
   }
 }
+
 export async function getMiningInfo ({ univ2Contract, reawordPoolContract, default_point, wei }) {
   if (process.client) {
     const { $web3_http, $account } = window.$nuxt
