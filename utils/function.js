@@ -4,6 +4,20 @@ export function nowTime () {
 }
 
 /**
+ * Returns whether a transaction happened in the last day (86400 seconds * 1000 milliseconds / second)
+ * @param tx to check for recency
+ */
+export function isTransactionRecent(tx) {
+  return (new Date().getTime() / 1000 - tx.addedTime) < 86400
+}
+
+
+// we want the latest one to come first, so return negative if a is after b
+export function newTransactionsFirst(a, b) {
+  return b.addedTime - a.addedTime
+}
+
+/**
  * 数组对象去重
  * @param attr
  * @param arr

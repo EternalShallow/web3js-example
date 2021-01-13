@@ -15,6 +15,9 @@
 .v-input--selection-controls .v-input--selection-controls__input:hover .v-input--selection-controls__ripple:before{
   transform: none;
 }
+.v-btn--icon.v-size--default .v-icon, .v-btn--fab.v-size--default .v-icon {
+  font-size: 50px;
+}
 .v-input--selection-controls__ripple {
   display: none;
   margin: 0 !important;
@@ -200,6 +203,41 @@
         width: 50px;
         height: 50px;
         padding: 10px;
+      }
+    }
+    .dialog-account-box{
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      background-color: $bgColor;
+      font-size: 32px;
+      border-radius: 32px 32px 0 0;
+      .account-title{
+        padding: 24px 40px;
+      }
+      .account-info-box{
+        margin-top: 24px;
+        padding: 24px 40px;
+        .account-info-con{
+          padding: 32px;
+          border-radius: 32px;
+          border: 1PX solid $bdColorddd;
+        }
+      }
+      .transaction-list{
+        padding: 24px 40px;
+        font-size: 26px;
+        .recent-transaction{
+          .clear-transaction{
+            color: $colorTip;
+          }
+        }
+        .transaction-item{
+          color: $colorTip;
+          margin-top: 20px;
+          font-size: 24px;
+        }
       }
     }
   }

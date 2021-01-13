@@ -42,8 +42,14 @@ export default {
   updateLoading (context, item) {
     context.commit('changeLoading', item)
   },
+  updateDialogAccount (context, item) {
+    context.commit('changeDialogAccount', item)
+  },
   updateAccounts (context, item) {
     context.commit('changeAccounts', item)
+  },
+  clearAllTransactions (context) {
+    context.commit('clearTransactions')
   },
   /**
    * approval?: { tokenAddress: string; spender: string }

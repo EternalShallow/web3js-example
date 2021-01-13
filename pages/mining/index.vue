@@ -2,8 +2,9 @@
   <div class="Page display-flex box-column">
     <div class="display-flex box-center-Y title-box">
       <div class="box-flex1"></div>
-      <div class="account-box title-sec display-flex box-center-Y" v-if="account && $store.state.pending_transactions.length < 1">{{account ? (account.substring(1,7) + '...' + account.substring(account.length-4, account.length)) : ''}}</div>
-      <div class="pending-box title-sec display-flex box-center-Y" v-show="account && $store.state.pending_transactions.length > 0">{{$store.state.pending_transactions.length}} Pending...
+      <div class="account-box title-sec display-flex box-center-Y" @click="$store.dispatch('updateDialogAccount', true)"
+           v-if="account && $store.state.pending_transactions.length < 1">{{account ? (account.substring(1,7) + '...' + account.substring(account.length-4, account.length)) : ''}}</div>
+      <div class="pending-box title-sec display-flex box-center-Y" @click="$store.dispatch('updateDialogAccount', true)" v-show="account && $store.state.pending_transactions.length > 0">{{$store.state.pending_transactions.length}} Pending...
         <div class="loading-con"><img src="../../assets/image/loading.gif" alt=""></div>
       </div>
     </div>

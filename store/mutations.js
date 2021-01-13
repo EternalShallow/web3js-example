@@ -4,6 +4,9 @@ export default {
   changeLoading (state, payload) {
     state.isLoading = payload
   },
+  changeDialogAccount (state, payload) {
+    state.dialogAccount = payload
+  },
   changeAccounts (state, payload) {
     state.accounts = payload
   },
@@ -40,6 +43,12 @@ export default {
       ...local_transaction,
       ...[{ ...payload }]
     ]
+    state.confirm_transactions = state.transactions.filter(item => item.confirmedTime)
+    state.pending_transactions = state.transactions.filter(item => !item.confirmedTime)
+    localTransaction.set()
+  },
+  clearTransactions (state) {
+    state.transactions = []
     state.confirm_transactions = state.transactions.filter(item => item.confirmedTime)
     state.pending_transactions = state.transactions.filter(item => !item.confirmedTime)
     localTransaction.set()
