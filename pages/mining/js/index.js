@@ -90,13 +90,13 @@ export default {
         text: init_wab3.message
       })
       if (init_wab3.code === 200) {
-        await that.getBalanceInfo()
+        // await that.getBalanceInfo()
       }
     },
     initContract () {
       that.univ2Contract = useTokenContractWeb3(COIN_ABI.coin_abi_UNIV2, process.env.coin_UNIV2_YF_USDT)
       that.reawordPoolContract = useTokenContractWeb3(COIN_ABI.abi_reaword_pool, process.env.pool_coin_UNIV2_YF_USDT)
-      that.getBalanceInfo()
+      // that.getBalanceInfo()
     },
     async getBalanceInfo () {
       try {

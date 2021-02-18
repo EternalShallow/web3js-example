@@ -1,6 +1,6 @@
 export default () => ({
   isLoading: false,
-  dialogAccount: true,
+  dialogAccount: false,
   accounts: [],
   transactions: [],
   pending_transactions: [],
